@@ -13,7 +13,12 @@ public record UpdateProjectCommand
     public string Description { get; init; }
 
 
-
+    public UpdateProjectCommand(Guid id,string name, string description)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+    }
     public UpdateProjectCommand(UpdateProjectDto Dto)
     {
         Id = Dto.Id;
