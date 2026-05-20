@@ -8,9 +8,12 @@ public record UpdateTaskStatusCommand
     : IRequest<bool>
 {
     public Guid Id { get; init; }
-
     public ProjectTaskStatus Status { get; init; }
-
+    public UpdateTaskStatusCommand(Guid id, ProjectTaskStatus status)
+    {
+        Id = id;
+        Status = status;
+    }
     public UpdateTaskStatusCommand(UpdateTaskStatusDto dto)
     {
         Id = dto.Id;

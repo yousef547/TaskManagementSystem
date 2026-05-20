@@ -19,10 +19,21 @@ public record CreateTaskCommand
 
     public Guid ProjectId { get; init; }
 
-    public CreateTaskCommand()
+    public CreateTaskCommand(
+        string title,
+        string description,
+        ProjectTaskStatus status,
+        DateTime dueDate,
+        ProjectTaskPriority priority,
+        Guid projectId)
     {
+        Title = title;
+        Description = description;
+        Status = status;
+        DueDate = dueDate;
+        Priority = priority;
+        ProjectId = projectId;
     }
-
     public CreateTaskCommand(CreateTaskDto dto)
     {
         Title = dto.Title;
