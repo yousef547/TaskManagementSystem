@@ -18,6 +18,7 @@ Task Management System is a production-ready backend API built with:
 - FluentValidation
 - Global Exception Handling
 - API Versioning
+- Unit Testing
 
 The system provides:
 
@@ -29,6 +30,48 @@ The system provides:
 - Auditing
 - Unified API Responses
 - Dockerized Environment
+
+---
+
+# 📬 Postman Collection
+
+## Download Collection
+
+[⬇ Download Postman Collection](./postman/TaskManagement_collection.json)
+
+---
+
+## Import Into Postman
+
+1. Open Postman
+2. Click Import
+3. Select:
+   `TaskManagement.postman_collection.json`
+4. Start testing APIs
+
+---
+
+# 🌐 Base URL
+
+```bash
+http://localhost:8000/api/v1
+```
+
+---
+
+# 🐳 Docker URLs
+
+## Swagger
+
+```bash
+http://localhost:8080/swagger
+```
+
+## API Base URL
+
+```bash
+http://localhost:8080/api/v1
+```
 
 ---
 
@@ -46,6 +89,12 @@ TaskManagementSystem
  │    ├── TaskManagement.Domain
  │    └── TaskManagement.Infrastructure
  │
+ ├── tests
+ │    └── TaskManagement.Application.UnitTests
+ │
+ ├── postman
+ │    └── TaskManagement_collection.json
+ │
  ├── docker-compose.yml
  └── TaskManagementSystem.sln
 ```
@@ -62,14 +111,6 @@ Contains:
 - Enums
 - Base Classes
 - Business Rules
-
-Example:
-
-- Project
-- ProjectTask
-- EntityBase
-- ProjectTaskPriority
-- ProjectTaskStatus
 
 ---
 
@@ -153,21 +194,6 @@ The API uses JWT Bearer Authentication.
 - Update Project
 - Delete Project
 
-## Project Entity
-
-```csharp
-public class Project
-{
-    public Guid Id { get; set; }
-
-    public string Name { get; set; }
-
-    public string Description { get; set; }
-
-    public DateTime CreatedAt { get; set; }
-}
-```
-
 ---
 
 # Task Module
@@ -178,27 +204,6 @@ public class Project
 - Update Task Status
 - Get Tasks By Project
 - Delete Task
-
-## Task Entity
-
-```csharp
-public class ProjectTask
-{
-    public Guid Id { get; set; }
-
-    public string Title { get; set; }
-
-    public string Description { get; set; }
-
-    public ProjectTaskStatus Status { get; set; }
-
-    public DateTime DueDate { get; set; }
-
-    public ProjectTaskPriority Priority { get; set; }
-
-    public Guid ProjectId { get; set; }
-}
-```
 
 ---
 
@@ -241,30 +246,9 @@ FluentValidation is used for validating:
 - Commands
 - Requests
 
-Example:
-
-```csharp
-public class LoginRequestDtoValidator
-    : AbstractValidator<LoginRequestDto>
-{
-    public LoginRequestDtoValidator()
-    {
-        RuleFor(x => x.Email)
-            .NotEmpty()
-            .EmailAddress();
-
-        RuleFor(x => x.Password)
-            .NotEmpty()
-            .MinimumLength(6);
-    }
-}
-```
-
 ---
 
 # Unified API Response
-
-All APIs return unified responses.
 
 ## Success Response
 
@@ -302,12 +286,6 @@ The API uses custom middleware for:
 - Logging
 - Error Response Formatting
 
-Features:
-
-- Centralized exception handling
-- Standardized error responses
-- Cleaner controllers
-
 ---
 
 # API Versioning
@@ -317,8 +295,8 @@ The API supports URL versioning.
 Example:
 
 ```text
-/api/v1/projects
-/api/v1/tasks
+/api/v1/project
+/api/v1/task
 ```
 
 ---
@@ -330,29 +308,6 @@ Redis is used as a distributed caching layer.
 ## Cached Queries
 
 - Get All Projects
-- Get Tasks By Project
-
-## Benefits
-
-- Faster responses
-- Reduced SQL Server load
-- Improved scalability
-
-## Caching Flow
-
-```text
-Request
-   ↓
-Check Redis
-   ↓
-Exists? → Return Cache
-   ↓
-Else → SQL Server
-   ↓
-Save To Redis
-   ↓
-Return Response
-```
 
 ---
 
@@ -364,11 +319,6 @@ The system automatically tracks:
 - CreatedDate
 - LastModifiedBy
 - LastModifiedDate
-
-The current authenticated user is automatically resolved using:
-
-- IHttpContextAccessor
-- ClaimsPrincipal
 
 ---
 
@@ -390,39 +340,12 @@ docker compose up --build
 
 ---
 
-# Docker Compose
-
-```yaml
-services:
-
-  taskmanagement-api:
-    build:
-      context: .
-      dockerfile: src/TaskManagement.API/Dockerfile
-
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-
-  redis:
-    image: redis:latest
-```
-
----
-
 # Database Migration
 
 ## Create Migration
 
 ```bash
 dotnet ef migrations add InitialCreate \
---project src/TaskManagement.Infrastructure \
---startup-project src/TaskManagement.API
-```
-
-## Update Database
-
-```bash
-dotnet ef database update \
 --project src/TaskManagement.Infrastructure \
 --startup-project src/TaskManagement.API
 ```
@@ -436,7 +359,49 @@ Swagger is enabled for API testing.
 ## Swagger URL
 
 ```text
-http://localhost:5093/swagger
+http://localhost:8000/swagger
+```
+
+---
+
+# 🧪 Unit Testing
+
+The project includes unit tests for:
+
+## Project Handlers
+
+- CreateProjectCommandHandler
+- UpdateProjectCommandHandler
+- DeleteProjectCommandHandler
+- GetAllProjectsQueryHandler
+- GetProjectByIdQueryHandler
+
+## Task Handlers
+
+- CreateTaskCommandHandler
+- UpdateTaskStatusCommandHandler
+- DeleteTaskCommandHandler
+- GetTasksByProjectQueryHandler
+
+## Validator Tests
+
+- CreateProjectDtoValidator
+- UpdateProjectDtoValidator
+- CreateTaskDtoValidator
+- UpdateTaskStatusDtoValidator
+- LoginRequestDtoValidator
+- RegisterRequestDtoValidator
+
+## Testing Technologies
+
+- xUnit
+- Moq
+- FluentAssertions
+
+## Run Tests
+
+```bash
+dotnet test
 ```
 
 ---
@@ -455,34 +420,9 @@ http://localhost:5093/swagger
 | JWT | Authentication |
 | Docker | Containerization |
 | Swagger | API Documentation |
-
----
-
-# Security
-
-Implemented security features:
-
-- JWT Authentication
-- Role-Based Authorization
-- Validation
-- Secure Password Hashing
-- Protected Endpoints
-
----
-
-# Future Improvements
-
-Possible future enhancements:
-
-- Refresh Tokens
-- Unit Testing
-- Integration Testing
-- Serilog Logging
-- RabbitMQ
-- Background Jobs
-- SignalR Notifications
-- Kubernetes Deployment
-- CI/CD Pipeline
+| xUnit | Unit Testing |
+| Moq | Mocking |
+| FluentAssertions | Assertions |
 
 ---
 
@@ -533,11 +473,11 @@ docker compose up --build
 
 | Method | Endpoint |
 |---|---|
-| POST | /api/v1/projects |
-| GET | /api/v1/projects |
-| GET | /api/v1/projects/{id} |
-| PUT | /api/v1/projects |
-| DELETE | /api/v1/projects/{id} |
+| POST | /api/v1/project |
+| GET | /api/v1/project |
+| GET | /api/v1/project/{id} |
+| PUT | /api/v1/project |
+| DELETE | /api/v1/project/{id} |
 
 ---
 
@@ -545,10 +485,37 @@ docker compose up --build
 
 | Method | Endpoint |
 |---|---|
-| POST | /api/v1/tasks |
-| PUT | /api/v1/tasks/status |
-| GET | /api/v1/tasks/project/{projectId} |
-| DELETE | /api/v1/tasks/{id} |
+| POST | /api/v1/task |
+| PUT | /api/v1/task/status |
+| GET | /api/v1/task/project/{projectId} |
+| DELETE | /api/v1/task/{id} |
+
+---
+
+# Security
+
+Implemented security features:
+
+- JWT Authentication
+- Role-Based Authorization
+- Validation
+- Secure Password Hashing
+- Protected Endpoints
+
+---
+
+# Future Improvements
+
+Possible future enhancements:
+
+- Refresh Tokens
+- Integration Testing
+- Serilog Logging
+- RabbitMQ
+- Background Jobs
+- SignalR Notifications
+- Kubernetes Deployment
+- CI/CD Pipeline
 
 ---
 
@@ -557,7 +524,5 @@ docker compose up --build
 Developed using:
 
 - Clean Architecture
-- Enterprise Patterns
 - Modern .NET Practices
 - Scalable Design Principles
-
