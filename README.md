@@ -46,7 +46,7 @@ The system provides:
 1. Open Postman
 2. Click Import
 3. Select:
-   `TaskManagement.postman_collection.json`
+   `TaskManagement_collection.json`
 4. Start testing APIs
 
 ---
