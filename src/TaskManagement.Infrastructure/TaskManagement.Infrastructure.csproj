@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <None Remove="TaskManagement.Infrastructure.csproj.Backup.tmp" />
+  </ItemGroup>
+
+  <ItemGroup>
 	 <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <ProjectReference Include="..\TaskManagement.Application\TaskManagement.Application.csproj" />
     <ProjectReference Include="..\TaskManagement.Domain\TaskManagement.Domain.csproj" />
