@@ -491,6 +491,45 @@ docker compose up --build
 | DELETE | /api/v1/task/{id} |
 
 ---
+# 📌 Task Status Enum
+
+```csharp
+public enum ProjectTaskStatus
+{
+    Pending = 1,
+    InProgress = 2,
+    Completed = 3,
+    Cancelled = 4
+}
+```
+
+| Value | Status |
+|---|---|
+| 1 | Pending |
+| 2 | InProgress |
+| 3 | Completed |
+| 4 | Cancelled |
+
+---
+
+# 📌 Task Priority Enum
+
+```csharp
+public enum ProjectTaskPriority
+{
+    Low = 1,
+    Medium = 2,
+    High = 3,
+    Critical = 4
+}
+```
+
+| Value | Priority |
+|---|---|
+| 1 | Low |
+| 2 | Medium |
+| 3 | High |
+| 4 | Critical |
 
 # Security
 
@@ -557,7 +596,7 @@ redis-test
 # 📝 Notes
 
 - Redis is required for distributed caching.
-- The API uses Redis for caching project and task queries.
+- The API uses Redis for caching project queries.
 - Default Redis port:
   
 ```text

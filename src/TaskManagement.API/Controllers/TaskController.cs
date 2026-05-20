@@ -28,9 +28,9 @@ public class TaskController : ControllerBase
     [HttpPost]
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Create(
-        CreateTaskCommand dto)
+        CreateTaskDto dto)
     {
-        var id = await _mediator.Send(dto);
+        var id = await _mediator.Send(new CreateTaskCommand(dto));
 
         return Ok(
         ApiResponse<Guid>.SuccessResponse(
