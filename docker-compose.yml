@@ -1,0 +1,69 @@
+services:
+
+  taskmanagement-api:
+    container_name: taskmanagement-api
+
+    build:
+      context: .
+      dockerfile: src/TaskManagement.API/Dockerfile
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+      ConnectionStrings__DefaultConnection: >
+        Server=sqlserver;
+        Database=TaskManagementDb;
+        User=sa;
+        Password=YourStrong@Passw0rd;
+        TrustServerCertificate=True;
+
+      Redis__ConnectionString: redis:6379
+
+    depends_on:
+      - sqlserver
+      - redis
+
+    networks:
+      - taskmanagement-network
+
+  sqlserver:
+    container_name: sqlserver
+
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+    environment:
+      SA_PASSWORD: "YourStrong@Passw0rd"
+      ACCEPT_EULA: "Y"
+
+    ports:
+      - "1433:1433"
+
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+    networks:
+      - taskmanagement-network
+
+  redis:
+    container_name: redis
+
+    image: redis:latest
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis-data:/data
+
+    networks:
+      - taskmanagement-network
+
+volumes:
+  sqlserver-data:
+  redis-data:
+
+networks:
+  taskmanagement-network:

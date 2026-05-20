@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TaskManagement.API/TaskManagement.API.csproj" Id="9ef0d4e8-8e0b-488d-bdf7-825bdb6c45eb" />
+    <Project Path="src/TaskManagement.Application/TaskManagement.Application.csproj" Id="a3d8e399-848b-413f-a553-1a0d002bfa6d" />
+    <Project Path="src/TaskManagement.Domain/TaskManagement.Domain.csproj" Id="86290923-40f6-492f-8cf4-37a9e1fa792d" />
+    <Project Path="src/TaskManagement.Infrastructure/TaskManagement.Infrastructure.csproj" Id="f4d1d539-95d7-4198-90f8-85197a1574c1" />
+  </Folder>
+</Solution>
