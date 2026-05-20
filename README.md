@@ -526,3 +526,64 @@ Developed using:
 - Clean Architecture
 - Modern .NET Practices
 - Scalable Design Principles
+
+
+
+
+# ⚠️ Redis Local Setup
+
+If you are running the project locally without Docker Compose, you must run a Redis container manually.
+
+## Run Redis Container
+
+```bash
+docker run -d --name redis-test -p 6379:6379 redis
+```
+
+## Verify Redis Is Running
+
+```bash
+docker ps
+```
+
+You should see:
+
+```text
+redis-test
+```
+
+---
+
+# 📝 Notes
+
+- Redis is required for distributed caching.
+- The API uses Redis for caching project and task queries.
+- Default Redis port:
+  
+```text
+6379
+```
+
+# ⚙️ appsettings.json Configuration (Local)
+
+If you are running locally, make sure Redis connection is configured correctly inside:
+
+```text
+src/TaskManagement.API/appsettings.json
+```
+
+## Example
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=TaskManagementDb;Trusted_Connection=True;TrustServerCertificate=True"
+  },
+
+  "Redis": {
+    "ConnectionString": "localhost:6379"
+  }
+}
+```
+
+
